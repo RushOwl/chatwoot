@@ -3,6 +3,8 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: <%= ENV.fetch('POSTGRES_HOST', 'localhost') %>
+  sslrootcert: <%= ENV.fetch('POSTGRES_CA_ROOT_CERT', '') %>
+  sslmode: <%= ENV.fetch('POSTGRES_SSL_MODE', '') %>
 
 development:
   <<: *default
