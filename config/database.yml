@@ -3,6 +3,9 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: <%= ENV.fetch('POSTGRES_HOST', 'localhost') %>
+  sslmode: <%= ENV.fetch('POSTGRES_SSL_MODE', 'verify-ca') %>
+  # and if you don't want to use ~/.postgresq/root.crt for the cert location, set:
+  sslrootcert: <%= ENV.fetch('POSTGRES_SSL_ROOT_CERT', 'verify-ca') %>
 
 development:
   <<: *default
