@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_03_151130) do
+ActiveRecord::Schema.define(version: 2020_05_22_115645) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -33,6 +34,7 @@ ActiveRecord::Schema.define(version: 2020_05_03_151130) do
     t.bigint "inviter_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "active_at"
     t.index ["account_id", "user_id"], name: "uniq_user_id_per_account_id", unique: true
     t.index ["account_id"], name: "index_account_users_on_account_id"
     t.index ["user_id"], name: "index_account_users_on_user_id"
@@ -94,6 +96,7 @@ ActiveRecord::Schema.define(version: 2020_05_03_151130) do
     t.string "outgoing_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "hide_input_for_bot_conversations", default: false
   end
 
   create_table "attachments", id: :serial, force: :cascade do |t|
@@ -245,6 +248,14 @@ ActiveRecord::Schema.define(version: 2020_05_03_151130) do
     t.index ["account_id"], name: "index_inboxes_on_account_id"
   end
 
+  create_table "installation_configs", force: :cascade do |t|
+    t.string "name", null: false
+    t.jsonb "serialized_value", default: "{}", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name", "created_at"], name: "index_installation_configs_on_name_and_created_at", unique: true
+  end
+
   create_table "messages", id: :serial, force: :cascade do |t|
     t.text "content"
     t.integer "account_id", null: false
@@ -284,6 +295,8 @@ ActiveRecord::Schema.define(version: 2020_05_03_151130) do
     t.jsonb "subscription_attributes", default: "{}", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "identifier"
+    t.index ["identifier"], name: "index_notification_subscriptions_on_identifier", unique: true
     t.index ["user_id"], name: "index_notification_subscriptions_on_user_id"
   end
 
@@ -314,6 +327,20 @@ ActiveRecord::Schema.define(version: 2020_05_03_151130) do
     t.datetime "updated_at", null: false
     t.integer "state", default: 0
     t.boolean "payment_source_added", default: false
+  end
+
+  create_table "super_admins", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_super_admins_on_email", unique: true
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
