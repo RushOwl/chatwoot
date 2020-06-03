@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
     - name: Build the Docker image
-      run: docker build --build-arg BUNDLE_WITHOUT='development:test' --build-arg EXECJS_RUNTIME=Disabled --build-arg RAILS_ENV='production' --build-arg RAILS_SERVE_STATIC_FILES='true' -f ./docker/Dockerfile --tag rushowl/chatwoot:develop-$(date +%s) .
-    - uses: docker/build-push-action@v1
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        repository: rushowl/chatwoot
-        tag_with_ref: true
+      run: docker build --build-arg BUNDLE_WITHOUT='development:test' --build-arg EXECJS_RUNTIME=Disabled --build-arg RAILS_ENV='production' --build-arg RAILS_SERVE_STATIC_FILES='true' -f ./docker/Dockerfile --tag rushowl/chatwoot:latest .
+    - name: Push the latest Docker image
+      run: docker push rushowl/chatwoot:latest
