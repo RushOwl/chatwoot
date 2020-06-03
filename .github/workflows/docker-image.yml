@@ -1,0 +1,14 @@
+name: RushOwl ChatWoot Image
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build --build-arg BUNDLE_WITHOUT='development:test' --build-arg EXECJS_RUNTIME=Disabled --build-arg RAILS_ENV='production' --build-arg RAILS_SERVE_STATIC_FILES='true' -f ./docker/Dockerfile --tag rushowl/chatwoot:develop-$(date +%s) .
