@@ -16,7 +16,7 @@ class PushNotification < ApplicationMailer
     push_notifications = [{user: {
         title: 'You have a new message on live chat',
         body: 'Our Customer Support Officer has sent you an message on live chat. Click here to read',
-        to: @contact&.identifier,
+        to: @contact.identifier,
         data: {
             title: 'You have a new message on live chat',
             body: 'Our Customer Support Officer has sent you an message on live chat. Click here to read',
