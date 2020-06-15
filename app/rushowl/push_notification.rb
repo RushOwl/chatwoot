@@ -11,8 +11,6 @@ class PushNotification < ApplicationMailer
     @contact = @conversation.contact
 
     uri = URI.parse(host)
-
-    header = {'Content-Type': 'text/json'}
     push_notifications = [{user: {
         title: 'You have a new message on live chat',
         body: 'Our Customer Support Officer has sent you an message on live chat. Click here to read',
@@ -23,11 +21,17 @@ class PushNotification < ApplicationMailer
             link: 'https://l.rushowl.sg/chat',
             action_type: 'link'
         }
-    }}]
+    }}].to_json
+
+    Rails.logger.info host
+    Rails.logger.info push_notifications
+
 
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
-    request.body = push_notifications.to_json
-    http.request(request)
+    request.body = push_notifications
+    response = http.request(request)
+
+    Rails.logger.info response
   end
 end
