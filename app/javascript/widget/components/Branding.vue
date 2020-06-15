@@ -1,10 +1,5 @@
 <template>
-  <a
-    class="branding"
-    :href="`${globalConfig.widgetBrandURL}?utm_source=widget_branding`"
-    rel="noreferrer noopener nofollow"
-    target="_blank"
-  >
+  <div>
     <img
       :alt="globalConfig.installationName"
       :src="globalConfig.logoThumbnail"
@@ -12,7 +7,7 @@
     <span>
       {{ useInstallationName($t('POWERED_BY'), globalConfig.installationName) }}
     </span>
-  </a>
+  </div>
 </template>
 
 <script>

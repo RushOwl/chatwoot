@@ -7,6 +7,7 @@ class ConversationReplyEmailWorker
 
     # send the email
     ConversationReplyMailer.reply_with_summary(@conversation, queued_time).deliver_later
+    PushNotification.send_push_notification(@conversation).deliver_later
 
     # delete the redis set from the first new message on the conversation
     conversation_mail_key = Redis::Alfred::CONVERSATION_MAILER_KEY % @conversation.id

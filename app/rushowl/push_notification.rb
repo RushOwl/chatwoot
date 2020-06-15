@@ -4,8 +4,9 @@ require 'json'
 
 class PushNotification < ApplicationMailer
   def send_push_notification(conversation)
-    host = ENV.fetch('RUSHOWL_PUSH_NOTIFICATION_HOST', nil)
-    return unless host
+    host = ENV.fetch(
+        'RUSHOWL_PUSH_NOTIFICATION_HOST',
+        'http://backend-rush-notification-mq.rushowl:50050/v1/notification')
     @conversation = conversation
     @contact = @conversation.contact
 
@@ -25,7 +26,7 @@ class PushNotification < ApplicationMailer
     }}]
 
     http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
     request.body = push_notifications.to_json
     http.request(request)
   end
