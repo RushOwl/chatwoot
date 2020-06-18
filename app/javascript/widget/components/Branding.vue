@@ -1,8 +1,6 @@
 <template>
   <div>
-    <span>
-      {{ useInstallationName($t('POWERED_BY'), globalConfig.installationName) }}
-    </span>
+    <span> </span>
   </div>
 </template>
 
