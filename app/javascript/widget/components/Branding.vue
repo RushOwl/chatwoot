@@ -1,9 +1,5 @@
 <template>
   <div>
-    <img
-      :alt="globalConfig.installationName"
-      :src="globalConfig.logoThumbnail"
-    />
     <span>
       {{ useInstallationName($t('POWERED_BY'), globalConfig.installationName) }}
     </span>
